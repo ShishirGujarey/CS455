@@ -1,6 +1,4 @@
-import Dictionary from './dictionary.js';
-
-const dictionary = Dictionary;const state = {
+const state = {
     secret: dictionary[Math.floor(Math.random() * dictionary.length)],
     grid: Array(6)
         .fill()
@@ -41,6 +39,9 @@ function drawGrid(container) {
     container.appendChild(grid);
 }
 
+
+
+
 function registerKeyboardEvents() {
     document.body.onkeydown = (e) => {
         const key = e.key;
@@ -65,97 +66,6 @@ function registerKeyboardEvents() {
 
         updateGrid();
     };
-}
-
-function getCurrentWord() {
-    return state.grid[state.currentRow].reduce((prev, curr) => prev + curr);
-}
-  
-function isWordValid(word) {
-    return dictionary.includes(word);
-}
-
-function getNumOfOccurrencesInWord(word, letter) {
-    let result = 0;
-    for (let i = 0; i < word.length; i++) {
-      if (word[i] === letter) {
-        result++;
-      }
-    }
-    return result;
-}
-  
-function getPositionOfOccurrence(word, letter, position) {
-    let result = 0;
-    for (let i = 0; i <= position; i++) {
-        if (word[i] === letter) {
-        result++;
-        }
-    }
-    return result;
-}
-
-function revealWord(guess) {
-    const row = state.currentRow;
-    const animation_duration = 500; // ms
-
-    for (let i = 0; i < 5; i++) {
-        const box = document.getElementById(`box${row}${i}`);
-        const letter = box.textContent;
-        const numOfOccurrencesSecret = getNumOfOccurrencesInWord(
-        state.secret,
-        letter
-        );
-        const numOfOccurrencesGuess = getNumOfOccurrencesInWord(guess, letter);
-        const letterPosition = getPositionOfOccurrence(guess, letter, i);
-
-        setTimeout(() => {
-        if (
-            numOfOccurrencesGuess > numOfOccurrencesSecret &&
-            letterPosition > numOfOccurrencesSecret
-        ) {
-            box.classList.add('empty');
-        } else {
-            if (letter === state.secret[i]) {
-            box.classList.add('right');
-            } else if (state.secret.includes(letter)) {
-            box.classList.add('wrong');
-            } else {
-            box.classList.add('empty');
-            }
-        }
-        }, ((i + 1) * animation_duration) / 2);
-
-        box.classList.add('animated');
-        box.style.animationDelay = `${(i * animation_duration) / 2}ms`;
-    }
-
-    const isWinner = state.secret === guess;
-    const isGameOver = state.currentRow === 5;
-
-    setTimeout(() => {
-        if (isWinner) {
-        alert('Congratulations!');
-        } else if (isGameOver) {
-        alert(`Better luck next time! The word was ${state.secret}.`);
-        }
-    }, 3 * animation_duration);
-}
-
-function isLetter(key) {
-    return key.length === 1 && key.match(/[a-z]/i);
-}
-
-function addLetter(letter) {
-    if (state.currentCol === 5) return;
-    state.grid[state.currentRow][state.currentCol] = letter;
-    state.currentCol++;
-}
-
-function removeLetter() {
-    if (state.currentCol === 0) return;
-    state.grid[state.currentRow][state.currentCol - 1] = '';
-    state.currentCol--;
 }
 
 function startup() {

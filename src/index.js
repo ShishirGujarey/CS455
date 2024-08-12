@@ -161,6 +161,25 @@ function removeLetter() {
     state.currentCol--;
 }
 
+function resetGame() {
+  state.secret = dictionary[Math.floor(Math.random() * dictionary.length)];
+  state.grid = Array(6)
+    .fill()
+    .map(() => Array(5).fill(''));
+  state.currentRow = 0;
+  state.currentCol = 0;
+
+  const game = document.getElementById('game');
+  game.innerHTML = '';
+  drawGrid(game);
+
+  updateGrid();
+
+  document.getElementById('reset-button').blur();
+}
+
+document.getElementById('reset-button').addEventListener('click', resetGame);
+
 function startup() {
   const game = document.getElementById('game');
   drawGrid(game);

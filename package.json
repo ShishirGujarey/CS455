@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "cp-cli index.js dictionary.js dist/",
     "lint": "npx eslint . --fix --max-warnings=0"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.10.0",
+    "cp-cli": "^1.0.2",
     "globals": "^15.9.0"
   }
 }

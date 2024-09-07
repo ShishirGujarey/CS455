@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "cp-cli index.js dictionary.js dist/",
+    "build": "echo 'No build step required'",
     "lint": "npx eslint . --fix --max-warnings=0"
   },
   "author": "",

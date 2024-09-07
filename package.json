@@ -12,7 +12,6 @@
   "license": "ISC",
   "devDependencies": {
     "@eslint/js": "^9.10.0",
-    "cp-cli": "^1.0.2",
     "globals": "^15.9.0"
   }
 }

@@ -2,8 +2,6 @@ import {Dictionary} from './dictionary.js';
 
 const dictionary = Dictionary;
 
-const pi_val = 3.14;
-
 const state = {
   secret: dictionary[Math.floor(Math.random() * dictionary.length)],
   grid: Array(6)

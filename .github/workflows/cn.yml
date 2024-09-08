@@ -27,9 +27,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Build the app
-        run: npm run build
-
   deploy:
     environment:
       name: github-pages

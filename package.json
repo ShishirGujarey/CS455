@@ -6,7 +6,7 @@
   "scripts": {
     "build": "echo 'No build step required'",
     "lint": "npx eslint . --fix --max-warnings=0",
-    "test": "jest",
+    "test": "jest --coverage",
     "check-duplication": "npx jscpd --min-lines 5 --min-tokens 50 --threshold 0 src"
   },
   "author": "",
@@ -27,6 +27,15 @@
     "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.js$": "babel-jest"
+    },
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
     }
   }
 }

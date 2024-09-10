@@ -7,7 +7,7 @@
     "build": "echo 'No build step required'",
     "lint": "npx eslint . --fix --max-warnings=0",
     "test": "jest",
-    "code-duplication": "npx jscpd --min-lines 1 --min-tokens 10 --threshold 0 src"
+    "check-duplication": "npx jscpd --min-lines 1 --min-tokens 10 --threshold 0 src"
   },
   "author": "",
   "type": "module",

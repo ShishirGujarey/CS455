@@ -1,4 +1,4 @@
-import { isWordValid, getCurrentWord, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter, addLetter } from '../src/index.js';
+import { isWordValid, getCurrentWord} from '../src/index.js';
 
 test('isWordValid should return true for a valid word in the dictionary', () => {
   expect(isWordValid('hello')).toBe(true);

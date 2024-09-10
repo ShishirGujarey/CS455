@@ -1,4 +1,4 @@
-import { isWordValid, getCurrentWord, getNumOfOccurrencesInWord, getPositionOfOccurrence } from '../src/index.js';
+import { isWordValid, getCurrentWord, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter } from '../src/index.js';
 
 test('isWordValid should return true for a valid word in the dictionary', () => {
   expect(isWordValid('hello')).toBe(true);
@@ -34,4 +34,11 @@ test('getPositionOfOccurrence should return the position of the nth occurrence o
   expect(getPositionOfOccurrence('hello', 'l', 2)).toBe(1);
   expect(getPositionOfOccurrence('hello', 'l', 3)).toBe(2);
   expect(getPositionOfOccurrence('hello', 'o', 4)).toBe(1);
+});
+
+test('isLetter should return true for a letter', () => {
+  expect(isLetter('a')).toBe(true);
+  expect(isLetter('z')).toBe(true);
+  expect(isLetter('1')).toBe(false);
+  expect(isLetter('!')).toBe(false);
 });

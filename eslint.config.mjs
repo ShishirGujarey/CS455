@@ -11,6 +11,9 @@ export default [
         ...globals.jest 
       },
     },
+    rules: {
+      "complexity": ["error", { max: 5 }],
+    },
   },
   pluginJs.configs.recommended,
 ];

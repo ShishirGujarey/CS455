@@ -49,16 +49,7 @@ function registerKeyboardEvents() {
   document.body.onkeydown = (e) => {
     const key = e.key;
     if (key === 'Enter') {
-      if (state.currentCol === 5) {
-        const word = getCurrentWord(state);
-        if (isWordValid(word)) {
-          revealWord(word);
-          state.currentRow++;
-          state.currentCol = 0;
-        } else {
-          alert('Not a valid word.');
-        }
-      }
+      handleEnterKey();
     }
     if (key === 'Backspace') {
       removeLetter();
@@ -66,12 +57,21 @@ function registerKeyboardEvents() {
     if (isLetter(key)) {
       addLetter(key);
     }
-    if (isLetter2(key)) {
-      addLetter(key);
-    }
-
     updateGrid();
   };
+}
+
+function handleEnterKey() {
+  if (state.currentCol === 5) {
+    const word = getCurrentWord(state);
+    if (isWordValid(word)) {
+      revealWord(word);
+      state.currentRow++;
+      state.currentCol = 0;
+    } else {
+      alert('Not a valid word.');
+    }
+  }
 }
 
 function getCurrentWord(state) {
@@ -150,10 +150,6 @@ function revealWord(guess) {
 }
 
 function isLetter(key) {
-  return key.length === 1 && /^[a-zA-Z]$/.test(key);
-}
-
-function isLetter2(key) {
   return key.length === 1 && /^[a-zA-Z]$/.test(key);
 }
   

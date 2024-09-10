@@ -12,6 +12,7 @@ const state = {
 };
 
 function drawGrid(container) {
+  if (!container) return
   const grid = document.createElement('div');
   grid.className = 'grid';
 
@@ -49,7 +50,7 @@ function registerKeyboardEvents() {
     const key = e.key;
     if (key === 'Enter') {
       if (state.currentCol === 5) {
-        const word = getCurrentWord();
+        const word = getCurrentWord(state);
         if (isWordValid(word)) {
           revealWord(word);
           state.currentRow++;
@@ -70,7 +71,7 @@ function registerKeyboardEvents() {
   };
 }
 
-function getCurrentWord() {
+function getCurrentWord(state) {
   return state.grid[state.currentRow].reduce((prev, curr) => prev + curr);
 }
 
@@ -100,7 +101,7 @@ function getPositionOfOccurrence(word, letter, position) {
 
 function revealWord(guess) {
   const row = state.currentRow;
-  const animation_duration = 500; // ms
+  const animation_duration = 500;
 
   for (let i = 0; i < 5; i++) {
     const box = document.getElementById(`box${row}${i}`);
@@ -146,7 +147,7 @@ function revealWord(guess) {
 }
 
 function isLetter(key) {
-    return key.length === 1 && key.match(/[a-z]/i);
+  return key.length === 1 && /^[a-zA-Z]$/.test(key);
 }
   
 function addLetter(letter) {
@@ -178,7 +179,13 @@ function resetGame() {
   document.getElementById('reset-button').blur();
 }
 
-document.getElementById('reset-button').addEventListener('click', resetGame);
+document.addEventListener('DOMContentLoaded', () => {
+  const resetButton = document.getElementById('reset-button');
+  if (resetButton) {
+    resetButton.addEventListener('click', resetGame);
+  }
+});
+
 
 function startup() {
   const game = document.getElementById('game');
@@ -188,3 +195,5 @@ function startup() {
 }
 
 startup();
+
+export { getCurrentWord, isWordValid, revealWord, resetGame, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter, addLetter, removeLetter };

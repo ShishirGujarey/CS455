@@ -4,15 +4,27 @@
   "description": "We have made a copy of the game WORDLE by NYT.  \r The game is deployed on github pages, on the link: https://shishirgujarey.github.io/CS455/  \r The aim of the game is to guess a random 5-letter word in 6 attempts. For each guessed word, a letter in the correct place changes to green, a letter that is present in the word but is at the wrong place turns Yellow, and a letter which is not present in the word turns grey.  \r You can load a new game by clicking the button at the bottom of the page.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo 'No build step required'",
-    "lint": "npx eslint . --fix --max-warnings=0"
+    "lint": "npx eslint . --fix --max-warnings=0",
+    "test": "jest"
   },
   "author": "",
+  "type": "module",
   "homepage": "https://shishirgujarey.github.io/CS455/",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.25.2",
+    "@babel/preset-env": "^7.25.4",
     "@eslint/js": "^9.10.0",
-    "globals": "^15.9.0"
+    "babel-jest": "^29.7.0",
+    "globals": "^15.9.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "transform": {
+      "^.+\\.js$": "babel-jest"
+    }
   }
 }

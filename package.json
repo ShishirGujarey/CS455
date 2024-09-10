@@ -6,7 +6,8 @@
   "scripts": {
     "build": "echo 'No build step required'",
     "lint": "npx eslint . --fix --max-warnings=0",
-    "test": "jest"
+    "test": "jest",
+    "code-duplication": "npx jscpd --min-lines 1 --min-tokens 10 --threshold 0 src"
   },
   "author": "",
   "type": "module",
@@ -19,7 +20,8 @@
     "babel-jest": "^29.7.0",
     "globals": "^15.9.0",
     "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0"
+    "jest-environment-jsdom": "^29.7.0",
+    "jscpd": "^4.0.5"
   },
   "jest": {
     "testEnvironment": "jsdom",

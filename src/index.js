@@ -66,6 +66,9 @@ function registerKeyboardEvents() {
     if (isLetter(key)) {
       addLetter(key);
     }
+    if (isLetter2(key)) {
+      addLetter(key);
+    }
 
     updateGrid();
   };
@@ -147,6 +150,10 @@ function revealWord(guess) {
 }
 
 function isLetter(key) {
+  return key.length === 1 && /^[a-zA-Z]$/.test(key);
+}
+
+function isLetter2(key) {
   return key.length === 1 && /^[a-zA-Z]$/.test(key);
 }
   

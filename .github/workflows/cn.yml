@@ -34,7 +34,7 @@ jobs:
 
       - name: Run code duplication check
         run: npm run check-duplication
-        
+
       - name: Run tests
         run: npm test
 
@@ -42,7 +42,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     permissions:
       pages: write

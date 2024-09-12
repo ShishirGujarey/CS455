@@ -2,7 +2,7 @@ import {Dictionary} from './dictionary.js';
 
 const dictionary = Dictionary;
 
-const state = {
+export const state = {
   secret: dictionary[Math.floor(Math.random() * dictionary.length)],
   grid: Array(6)
     .fill()

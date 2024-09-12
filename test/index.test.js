@@ -1,12 +1,18 @@
-import { state, isWordValid, getCurrentWord, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter, addLetter, removeLetter } from '../src/index.js';
+import { state, isWordValid, getCurrentWord, getNumOfOccurrencesInWord, 
+  getPositionOfOccurrence, isLetter, addLetter, 
+  removeLetter, resetGame, drawGrid, updateGrid,
+  revealWord } from '../src/index.js';
 
-test('isWordValid should return true for a valid word in the dictionary', () => {
-  expect(isWordValid('hello')).toBe(true);
+describe('isWordValid', () => {
+  test('isWordValid should return true for a valid word in the dictionary', () => {
+    expect(isWordValid('hello')).toBe(true);
+  });
+  
+  test('isWordValid should return false for an invalid word', () => {
+    expect(isWordValid('xyzab')).toBe(false);
+  });
 });
 
-test('isWordValid should return false for an invalid word', () => {
-  expect(isWordValid('xyzab')).toBe(false);
-});
 
 describe('getCurrentWord', () => {
   beforeEach(() => {
@@ -41,24 +47,29 @@ describe('getCurrentWord', () => {
   });
 });
 
-
-test('getNumOfOccurrencesInWord should return the number of occurrences of a letter in a word', () => {
-  expect(getNumOfOccurrencesInWord('hello', 'l')).toBe(2);
-  expect(getNumOfOccurrencesInWord('hello', 'o')).toBe(1);
-  expect(getNumOfOccurrencesInWord('hello', 'z')).toBe(0);
+describe('getNumOfOccurrencesInWord', () => {
+  test('getNumOfOccurrencesInWord should return the number of occurrences of a letter in a word', () => {
+    expect(getNumOfOccurrencesInWord('hello', 'l')).toBe(2);
+    expect(getNumOfOccurrencesInWord('hello', 'o')).toBe(1);
+    expect(getNumOfOccurrencesInWord('hello', 'z')).toBe(0);
+  });
 });
 
-test('getPositionOfOccurrence should return the position of the nth occurrence of a letter in a word', () => {
-  expect(getPositionOfOccurrence('hello', 'l', 2)).toBe(1);
-  expect(getPositionOfOccurrence('hello', 'l', 3)).toBe(2);
-  expect(getPositionOfOccurrence('hello', 'o', 4)).toBe(1);
+describe('getPositionOfOccurrence', () => {
+  test('getPositionOfOccurrence should return the position of the nth occurrence of a letter in a word', () => {
+    expect(getPositionOfOccurrence('hello', 'l', 2)).toBe(1);
+    expect(getPositionOfOccurrence('hello', 'l', 3)).toBe(2);
+    expect(getPositionOfOccurrence('hello', 'o', 4)).toBe(1);
+  });
 });
 
-test('isLetter should return true for a letter', () => {
-  expect(isLetter('a')).toBe(true);
-  expect(isLetter('z')).toBe(true);
-  expect(isLetter('1')).toBe(false);
-  expect(isLetter('!')).toBe(false);
+describe('isLetter', () => {
+  test('isLetter should return true for a letter', () => {
+    expect(isLetter('a')).toBe(true);
+    expect(isLetter('z')).toBe(true);
+    expect(isLetter('1')).toBe(false);
+    expect(isLetter('!')).toBe(false);
+  });
 });
 
 describe('addLetter', () => {
@@ -116,3 +127,55 @@ describe('removeLetter', () => {
     expect(state.currentCol).toBe(0);
   });
 });
+
+jest.mock('../src/index.js', () => ({
+  ...jest.requireActual('../src/index.js'),
+  drawGrid: jest.fn(),
+  updateGrid: jest.fn(),
+}));
+
+describe('resetGame', () => {
+  beforeEach(() => {
+    state.secret = 'funny';  // Initial secret word
+    state.grid = [
+      ['h', 'e', 'l', 'l', 'o'],
+      ['c', 'l', 'e', 'a', 'r'],
+      ['f', 'u', 'n', 'n', 'y'],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+      ['', '', '', '', ''],
+    ];
+    state.currentRow = 2;
+    state.currentCol = 4;
+    document.body.innerHTML = `
+      <div id="game"></div>
+      <button id="reset-button"></button>
+    `;
+    drawGrid.mockClear();
+    updateGrid.mockClear();
+  });
+
+  test('resets the game state correctly', () => {
+    resetGame();
+
+    expect(state.secret).not.toBe('funny');  // Secret word should change
+    expect(state.secret.length).toBe(5);
+
+    const expectedEmptyGrid = Array(6).fill().map(() => Array(5).fill(''));
+    expect(state.grid).toEqual(expectedEmptyGrid);
+
+    expect(state.currentRow).toBe(0);
+    expect(state.currentCol).toBe(0);
+  });
+
+  test('clears the grid', () => {
+    resetGame();
+    state.grid.forEach(row => {
+      row.forEach(cell => {
+        expect(cell).toBe('');
+      });
+    });
+  });
+});
+
+

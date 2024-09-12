@@ -117,6 +117,7 @@ function revealWord(guess) {
     const letterPosition = getPositionOfOccurrence(guess, letter, i);
 
     setTimeout(() => {
+      console.log(letter, state.secret[i]);
       if (
         numOfOccurrencesGuess > numOfOccurrencesSecret &&
         letterPosition > numOfOccurrencesSecret
@@ -176,10 +177,12 @@ function resetGame() {
   const game = document.getElementById('game');
   game.innerHTML = '';
   drawGrid(game);
-
   updateGrid();
 
-  document.getElementById('reset-button').blur();
+  const resetButton = document.getElementById('reset-button');
+  if (resetButton) {    
+    resetButton.blur();
+  }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -199,4 +202,4 @@ function startup() {
 
 startup();
 
-export { getCurrentWord, isWordValid, revealWord, resetGame, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter, addLetter, removeLetter };
+export { getCurrentWord, isWordValid, revealWord, resetGame, getNumOfOccurrencesInWord, getPositionOfOccurrence, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };

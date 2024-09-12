@@ -75,6 +75,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
+  top: 570px;
 }
 
 #reset-button .reset-icon {
@@ -98,6 +100,6 @@ h1 {
 h3 {
   color: white;
   font-family: 'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
-  margin-top: -150px;
-  margin-bottom: 5px;
+  position: absolute;
+  top: 520px;
 }

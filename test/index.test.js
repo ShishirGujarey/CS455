@@ -178,4 +178,96 @@ describe('resetGame', () => {
   });
 });
 
+describe('revealWord', () => {
+  beforeEach(() => {
+    document.body.innerHTML = '<div id="game"></div>';
+    
+    const game = document.getElementById('game');
+    for (let i = 0; i < 6; i++) {
+      for (let j = 0; j < 5; j++) {
+        const box = document.createElement('div');
+        box.className = 'box';
+        box.id = `box${i}${j}`;
+        game.appendChild(box);
+      }
+    }
 
+    state.grid = Array(6).fill().map(() => Array(5).fill(''));
+    state.secret = 'apple';
+    state.currentRow = 0;
+  });
+
+  test('revealWord adds correct classes for matching letters', () => {
+    jest.useFakeTimers();
+  
+    const guess = 'apple';
+    for (let i = 0; i < guess.length; i++) {
+      state.grid[0][i] = guess[i];
+      const box = document.getElementById(`box0${i}`);
+      box.textContent = guess[i];
+    }
+    revealWord(guess);
+  
+    jest.advanceTimersByTime(500 * 3);
+  
+    for (let i = 0; i < 5; i++) {
+      const box = document.getElementById(`box0${i}`);
+      expect(box.classList.contains('right')).toBe(true);
+    }
+  
+    jest.useRealTimers();
+  });
+  
+  test('revealWord adds wrong and empty classes for incorrect letters', () => {
+    jest.useFakeTimers();
+  
+    const guess = 'april';
+    for (let i = 0; i < guess.length; i++) {
+      state.grid[0][i] = guess[i];
+      const box = document.getElementById(`box0${i}`);
+      box.textContent = guess[i];
+    }
+    revealWord(guess);
+  
+    jest.advanceTimersByTime(500 * 3);
+    expect(document.getElementById('box00').classList.contains('right')).toBe(true);
+    expect(document.getElementById('box01').classList.contains('right')).toBe(true);
+    expect(document.getElementById('box02').classList.contains('empty')).toBe(true);
+    expect(document.getElementById('box03').classList.contains('empty')).toBe(true);
+    expect(document.getElementById('box04').classList.contains('wrong')).toBe(true);
+  
+    jest.useRealTimers();
+  });
+  
+  // Test for handling game win
+  test('revealWord triggers win alert when the guess matches the secret', () => {
+    jest.useFakeTimers();
+    global.alert = jest.fn(); // Mock alert
+  
+    const guess = 'apple'; // Correct guess
+    revealWord(guess);
+  
+    // Advance timers to trigger the alert
+    jest.advanceTimersByTime(500 * 3); 
+  
+    expect(global.alert).toHaveBeenCalledWith('Congratulations!');
+    
+    jest.useRealTimers();
+  });
+  
+  // Test for handling game over
+  test('revealWord triggers game over alert when on the last row', () => {
+    jest.useFakeTimers();
+    global.alert = jest.fn(); // Mock alert function
+  
+    state.currentRow = 5; // Last row of the grid
+    const guess = 'apric'; // Incorrect guess
+    revealWord(guess);
+  
+    jest.advanceTimersByTime(500 * 3); // Allow setTimeout to finish
+  
+    expect(global.alert).toHaveBeenCalledWith(`Better luck next time! The word was ${state.secret}.`);
+    
+    jest.useRealTimers();
+  });
+});

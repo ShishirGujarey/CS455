@@ -1,0 +1,16 @@
+Initial Metrics:
+Code Duplication: 0%
+Code Complexity: The function registerKeyboardEvents had a Code Complexity of 7, which was not passing the set threshold of 5.
+Test Coverage: 0%
+
+Final Metrics:
+Code Duplication: 0%
+Code Complexity: The maximum Code Complexity is now 5.
+Test Coverage:
+---------------|---------|----------|---------|---------|-------------------                                                                                            
+File           | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                                                                                             
+---------------|---------|----------|---------|---------|-------------------
+All files      |    82.3 |    61.53 |   86.36 |   81.37 | 
+ dictionary.js |     100 |      100 |     100 |     100 | 
+ index.js      |   82.14 |    61.53 |   86.36 |   81.18 | 50-72,132,189-191
+---------------|---------|----------|---------|---------|-------------------

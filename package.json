@@ -7,7 +7,8 @@
     "build": "echo 'No build step required'",
     "lint": "npx eslint . --fix --max-warnings=0",
     "test": "jest --coverage",
-    "check-duplication": "npx jscpd --min-lines 5 --min-tokens 50 --threshold 0 public"
+    "check-duplication": "npx jscpd --min-lines 5 --min-tokens 50 --threshold 0 public",
+    "migrate": "psql $DATABASE_URL -f migrations/create_tables.sql"
   },
   "author": "",
   "type": "module",
@@ -41,6 +42,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.21.1",
-    "pg": "^8.13.0"
+    "pg": "^8.13.0",
+    "uuid": "^10.0.0"
   }
 }

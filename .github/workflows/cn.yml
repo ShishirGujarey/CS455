@@ -53,6 +53,24 @@ jobs:
 
       - name: Run tests
         run: npm test
+  
+  migrate:
+    runs-on: ubuntu-latest
+    name: Migrate Database
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up PostgreSQL client
+        run: sudo apt-get install postgresql-client
+
+      - name: Run Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: npm run migrate
 
   deploy:
     runs-on: ubuntu-latest

@@ -187,7 +187,7 @@ async function resetGame() {
       resetButton.blur();
     }
   } catch (error) {
-    alert('Error resetting game.');
+    alert('Error resetting game.', error);
   }
 }
 

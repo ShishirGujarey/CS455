@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { Dictionary } from '../public/dictionary.js';
+import { Dictionary } from '../dictionary.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;

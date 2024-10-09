@@ -1,4 +1,4 @@
-import {Dictionary} from './dictionary.js';
+import {Dictionary} from '../backend/dictionary.js';
 
 const dictionary = Dictionary;
 

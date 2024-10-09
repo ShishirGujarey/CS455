@@ -1,7 +1,4 @@
-// import { state, isWordValid, getCurrentWord, getNumOfOccurrencesInWord, 
-//   getPositionOfOccurrence, isLetter, addLetter, 
-//   removeLetter, resetGame, drawGrid, updateGrid,
-//   revealWord } from '../src/index.js';
+import { isLetter } from '../src/index.js';
 
 // describe('isWordValid', () => {
 //   test('isWordValid should return true for a valid word in the dictionary', () => {
@@ -63,14 +60,14 @@
 //   });
 // });
 
-// describe('isLetter', () => {
-//   test('isLetter should return true for a letter', () => {
-//     expect(isLetter('a')).toBe(true);
-//     expect(isLetter('z')).toBe(true);
-//     expect(isLetter('1')).toBe(false);
-//     expect(isLetter('!')).toBe(false);
-//   });
-// });
+describe('isLetter', () => {
+  test('isLetter should return true for a letter', () => {
+    expect(isLetter('a')).toBe(true);
+    expect(isLetter('z')).toBe(true);
+    expect(isLetter('1')).toBe(false);
+    expect(isLetter('!')).toBe(false);
+  });
+});
 
 // describe('addLetter', () => {
 //   beforeEach(() => {

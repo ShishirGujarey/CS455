@@ -3,6 +3,7 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { Dictionary } from './dictionary.js';
+import { query } from './db.js'; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -102,6 +103,16 @@ app.get('/api/game/:gameId', (req, res) => {
     won: game.won
   });
 });
+
+app.get('/api/test-db', async (req, res) => {
+    try {
+      const result = await query('SELECT NOW()');
+      res.json({ currentTime: result.rows[0].now });
+    } catch (error) {
+      console.error('Database query failed:', error);
+      res.status(500).json({ error: 'Database query failed' });
+    }
+  });
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running!' });

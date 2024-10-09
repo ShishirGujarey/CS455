@@ -63,7 +63,7 @@ async function handleEnterKey() {
     const word = getCurrentWord(state);
     try {
       const response = await submitGuess(word);
-      await applyFeedback(response.feedback); // Wait for animations to complete
+      await applyFeedback(response.feedback);
       state.completed = response.completed;
       state.won = response.won;
 

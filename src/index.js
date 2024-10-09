@@ -117,6 +117,7 @@ function revealWord(guess) {
     const letterPosition = getPositionOfOccurrence(guess, letter, i);
 
     setTimeout(() => {
+      console.log(letter, state.secret[i]);
       if (
         numOfOccurrencesGuess > numOfOccurrencesSecret &&
         letterPosition > numOfOccurrencesSecret

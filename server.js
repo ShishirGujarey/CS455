@@ -38,81 +38,70 @@ app.post('/api/start', (req, res) => {
   res.json({ gameId });
 });
 
-function calculateFeedback(secret, guess) {
-    const feedback = Array(5).fill('empty');
-    const secretLetters = secret.split('');
-    const guessLetters = guess.split('');
-  
-    guessLetters.forEach((letter, index) => {
-      if (letter === secretLetters[index]) {
-        feedback[index] = 'right';
-        secretLetters[index] = null;
-        guessLetters[index] = null;
-      }
-    });
-  
-    guessLetters.forEach((letter, index) => {
-      if (letter && secretLetters.includes(letter)) {
-        feedback[index] = 'wrong';
-        secretLetters[secretLetters.indexOf(letter)] = null;
-      }
-    });
-  
-    return feedback;
+app.post('/api/guess', (req, res) => {
+  const { gameId, guess } = req.body;
+  const game = games[gameId];
+
+  if (!game || game.completed) {
+    return res.status(400).json({ error: 'Invalid or completed game.' });
   }
-  
-  app.post('/api/guess', (req, res) => {
-    const { gameId, guess } = req.body;
-  
-    if (!gameId || !guess) {
-      return res.status(400).json({ error: 'Missing gameId or guess.' });
+
+  const upperGuess = guess.toUpperCase();
+
+  if (upperGuess.length !== 5 || !isWordValid(upperGuess)) {
+    return res.status(400).json({ error: 'Invalid word.' });
+  }
+
+  const row = game.currentRow;
+
+  if (row >= 6) {
+    return res.status(400).json({ error: 'No more attempts left.' });
+  }
+
+  game.grid[row] = upperGuess.split('');
+  game.currentRow++;
+
+  if (upperGuess === game.secret) {
+    game.completed = true;
+    game.won = true;
+  } else if (game.currentRow >= 6) {
+    game.completed = true;
+  }
+
+  const feedback = upperGuess.split('').map((letter, index) => {
+    if (letter === game.secret[index]) {
+      return 'right';
+    } else if (game.secret.includes(letter)) {
+      return 'wrong';
+    } else {
+      return 'empty';
     }
-  
-    const game = games[gameId];
-  
-    if (!game) {
-      return res.status(400).json({ error: 'Invalid gameId.' });
-    }
-  
-    if (game.completed) {
-      return res.status(400).json({ error: 'Game is already completed.' });
-    }
-  
-    const upperGuess = guess.toUpperCase();
-  
-    if (upperGuess.length !== 5) {
-      return res.status(400).json({ error: 'Guess must be 5 letters.' });
-    }
-  
-    if (!isWordValid(upperGuess)) {
-      return res.status(400).json({ error: 'Guess is not a valid word.' });
-    }
-  
-    const row = game.currentRow;
-  
-    if (row >= 6) {
-      return res.status(400).json({ error: 'No attempts left.' });
-    }
-  
-    game.grid[row] = upperGuess.split('');
-    game.currentRow += 1;
-  
-    if (upperGuess === game.secret) {
-      game.completed = true;
-      game.won = true;
-    } else if (game.currentRow >= 6) {
-      game.completed = true;
-    }
-  
-    const feedback = calculateFeedback(game.secret, upperGuess);
-  
-    res.json({
-      feedback,
-      completed: game.completed,
-      won: game.won
-    });
   });
-  
+
+  const response = { feedback, completed: game.completed, won: game.won };
+  if (game.completed && !game.won) {
+    response.secret = game.secret;
+  }
+
+  res.json(response);
+});
+
+app.get('/api/game/:gameId', (req, res) => {
+  const { gameId } = req.params;
+  const game = games[gameId];
+
+  if (!game) {
+    return res.status(400).json({ error: 'Invalid game ID.' });
+  }
+
+  res.json({
+    grid: game.grid,
+    currentRow: game.currentRow,
+    currentCol: game.currentCol,
+    completed: game.completed,
+    won: game.won
+  });
+});
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server is running!' });

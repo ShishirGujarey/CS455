@@ -1,4 +1,4 @@
-import { isLetter } from '../src/index.js';
+import { isLetter } from '../public/index.js';
 
 // describe('isWordValid', () => {
 //   test('isWordValid should return true for a valid word in the dictionary', () => {

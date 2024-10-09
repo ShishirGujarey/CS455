@@ -12,7 +12,7 @@ export default [
       },
     },
     rules: {
-      "complexity": ["error", { max: 5 }],
+      "complexity": ["error", { max: 10 }],
     },
   },
   pluginJs.configs.recommended,

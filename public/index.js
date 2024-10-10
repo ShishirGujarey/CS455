@@ -364,6 +364,37 @@ function setupLeaderboardModalEvents() {
   };
 }
 
+function showInstructionsModal() {
+  const modal = document.getElementById('instructions-modal');
+  modal.style.display = 'block';
+}
+
+function closeInstructionsModal() {
+  const modal = document.getElementById('instructions-modal');
+  modal.style.display = 'none';
+}
+
+function setupInstructionsModalEvents() {
+  const modal = document.getElementById('instructions-modal');
+  const closeBtn = document.getElementById('close-instructions-modal');
+  const instructionsBtn = document.getElementById('instructions-button');
+
+  closeBtn.onclick = () => {
+    closeInstructionsModal();
+  };
+
+  instructionsBtn.onclick = () => {
+    showInstructionsModal();
+  };
+
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      closeInstructionsModal();
+    }
+  };
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   const resetButton = document.getElementById('reset-button');
   if (resetButton) {
@@ -373,6 +404,7 @@ document.addEventListener('DOMContentLoaded', () => {
   registerKeyboardEvents();
   setupNameModalEvents();
   setupLeaderboardModalEvents();
+  setupInstructionsModalEvents();
 });
 
 export { getCurrentWord, resetGame, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };

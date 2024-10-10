@@ -410,4 +410,17 @@ document.addEventListener('DOMContentLoaded', () => {
   setupInstructionsModalEvents();
 });
 
-export { getCurrentWord, resetGame, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };
+export {
+  drawGrid,
+  addLetter,
+  removeLetter,
+  getCurrentWord,
+  sanitizeName,
+  calculateScore,
+  handleEnterKey,
+  registerKeyboardEvents,
+  resetGame,
+  submitGuess,
+  saveScore
+};
+

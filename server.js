@@ -4,6 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { Dictionary } from './dictionary.js';
 import { query } from './db.js'; 
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -111,6 +112,55 @@ app.get('/api/test-db', async (req, res) => {
     } catch (error) {
       console.error('Database query failed:', error);
       res.status(500).json({ error: 'Database query failed' });
+    }
+  });
+
+  app.post('/api/save-score', async (req, res) => {
+    const { name, score } = req.body;
+  
+    if (!name || typeof score !== 'number') {
+      return res.status(400).json({ error: 'Name and score are required.' });
+    }
+  
+    try {
+      let player = await query('SELECT id FROM players WHERE name = $1', [name]);
+  
+      if (player.rows.length === 0) {
+        const insertPlayerResult = await query(
+          'INSERT INTO players (name) VALUES ($1) RETURNING id',
+          [name]
+        );
+        player = insertPlayerResult.rows[0];
+      } else {
+        player = player.rows[0];
+      }
+  
+      await query(
+        'INSERT INTO scores (player_id, score) VALUES ($1, $2)',
+        [player.id, score]
+      );
+  
+      res.status(201).json({ message: 'Score saved successfully.' });
+    } catch (error) {
+      console.error('Error saving score:', error);
+      res.status(500).json({ error: 'Failed to save score.' });
+    }
+  });
+  
+  app.get('/api/leaderboard', async (req, res) => {
+    try {
+      const result = await query(`
+        SELECT players.name, scores.score, scores.created_at
+        FROM scores
+        JOIN players ON scores.player_id = players.id
+        ORDER BY scores.score DESC, scores.created_at ASC
+        LIMIT 10
+      `);
+  
+      res.json(result.rows);
+    } catch (error) {
+      console.error('Error fetching leaderboard:', error);
+      res.status(500).json({ error: 'Failed to fetch leaderboard.' });
     }
   });
 

@@ -421,6 +421,13 @@ export {
   registerKeyboardEvents,
   resetGame,
   submitGuess,
-  saveScore
+  saveScore,
+  showInstructionsModal,
+  closeInstructionsModal,
+  showLeaderboardModal,
+  closeLeaderboardModal,
+  showNameModal,
+  closeNameModal,
+  isAnyModalOpen
 };
 

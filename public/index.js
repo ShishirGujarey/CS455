@@ -80,10 +80,47 @@ async function handleEnterKey() {
           state.secret = response.secret;
           alert(`Better luck next time! The word was ${state.secret}.`);
         }
+        const finalScore = calculateScore();
+        await saveScore(state.playerName, finalScore);
       }
     } catch (error) {
       alert(error.message);
     }
+  }
+}
+
+function calculateScore() {
+
+  if (state.won) {
+    return 100 - (state.currentRow * 10);
+  } else {
+    return 0;
+  }
+}
+
+async function saveScore(name, score) {
+  try {
+    const response = await fetch(`${API_URL}/save-score`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name,
+        score
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to save score.');
+    }
+
+    console.log('Score saved successfully.');
+  } catch (error) {
+    console.error('Error saving score:', error);
+    alert('Failed to save your score. Please try again.');
   }
 }
 

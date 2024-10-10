@@ -153,3 +153,27 @@ button {
   font-size: 16px;
   cursor: pointer;
 }
+
+#leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+#leaderboard-table th, #leaderboard-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#leaderboard-table th {
+  background-color: #f2f2f2;
+}
+
+#leaderboard-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+#leaderboard-table tr:hover {
+  background-color: #ddd;
+}

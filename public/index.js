@@ -89,41 +89,6 @@ async function handleEnterKey() {
   }
 }
 
-function calculateScore() {
-
-  if (state.won) {
-    return 100 - (state.currentRow * 10);
-  } else {
-    return 0;
-  }
-}
-
-async function saveScore(name, score) {
-  try {
-    const response = await fetch(`${API_URL}/save-score`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name,
-        score
-      })
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || 'Failed to save score.');
-    }
-
-    console.log('Score saved successfully.');
-  } catch (error) {
-    console.error('Error saving score:', error);
-    alert('Failed to save your score. Please try again.');
-  }
-}
-
 function getCurrentWord(state) {
   return state.grid[state.currentRow].reduce((prev, curr) => prev + curr);
 }
@@ -231,6 +196,39 @@ async function resetGame() {
   }
 }
 
+function calculateScore() {
+  if (state.won) {
+    return 100 - (state.currentRow * 10);
+  } else {
+    return 0;
+  }
+}
+
+async function saveScore(name, score) {
+  try {
+    const response = await fetch(`${API_URL}/save-score`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name,
+        score
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || 'Failed to save score.');
+    }
+
+    console.log('Score saved successfully.');
+  } catch (error) {
+    console.error('Error saving score:', error);
+    alert('Failed to save your score. Please try again.');
+  }
+}
 
 function showNameModal() {
   const modal = document.getElementById('name-modal');
@@ -271,6 +269,69 @@ function setupNameModalEvents() {
   };
 }
 
+function showLeaderboardModal() {
+  const modal = document.getElementById('leaderboard-modal');
+  const tbody = document.querySelector('#leaderboard-table tbody');
+  tbody.innerHTML = '';
+
+  fetch(`${API_URL}/leaderboard`)
+    .then(response => response.json())
+    .then(data => {
+      data.forEach((entry, index) => {
+        const row = document.createElement('tr');
+
+        const rankCell = document.createElement('td');
+        rankCell.textContent = index + 1;
+        row.appendChild(rankCell);
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = entry.name;
+        row.appendChild(nameCell);
+
+        const scoreCell = document.createElement('td');
+        scoreCell.textContent = entry.score;
+        row.appendChild(scoreCell);
+
+        const dateCell = document.createElement('td');
+        const date = new Date(entry.created_at);
+        dateCell.textContent = date.toLocaleString();
+        row.appendChild(dateCell);
+
+        tbody.appendChild(row);
+      });
+      modal.style.display = 'block';
+    })
+    .catch(error => {
+      console.error('Error fetching leaderboard:', error);
+      alert('Failed to load leaderboard. Please try again later.');
+    });
+}
+
+function closeLeaderboardModal() {
+  const modal = document.getElementById('leaderboard-modal');
+  modal.style.display = 'none';
+}
+
+function setupLeaderboardModalEvents() {
+  const modal = document.getElementById('leaderboard-modal');
+  const closeBtn = document.getElementById('close-leaderboard-modal');
+  const leaderboardBtn = document.getElementById('leaderboard-button');
+
+  closeBtn.onclick = () => {
+    closeLeaderboardModal();
+  };
+
+  leaderboardBtn.onclick = () => {
+    showLeaderboardModal();
+  };
+
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      closeLeaderboardModal();
+    }
+  };
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const resetButton = document.getElementById('reset-button');
   if (resetButton) {
@@ -279,6 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
   resetGame();
   registerKeyboardEvents();
   setupNameModalEvents();
+  setupLeaderboardModalEvents();
 });
 
 export { getCurrentWord, resetGame, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };

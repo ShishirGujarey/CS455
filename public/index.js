@@ -44,6 +44,8 @@ function drawBox(container, row, col, letter = '') {
 
 function registerKeyboardEvents() {
   document.body.onkeydown = (e) => {
+    if (isAnyModalOpen()) return;
+
     if (state.completed) return;
     const key = e.key;
     if (key === 'Enter') {
@@ -57,6 +59,16 @@ function registerKeyboardEvents() {
     }
     updateGrid();
   };
+}
+
+function isAnyModalOpen() {
+  const modals = document.querySelectorAll('.modal');
+  for (let modal of modals) {
+    if (modal.style.display === 'block') {
+      return true;
+    }
+  }
+  return false;
 }
 
 async function handleEnterKey() {
@@ -206,13 +218,14 @@ function calculateScore() {
 
 async function saveScore(name, score) {
   try {
+    const sanitizedName = sanitizeName(name);
     const response = await fetch(`${API_URL}/save-score`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name,
+        name: sanitizedName,
         score
       })
     });
@@ -228,6 +241,10 @@ async function saveScore(name, score) {
     console.error('Error saving score:', error);
     alert('Failed to save your score. Please try again.');
   }
+}
+
+function sanitizeName(name) {
+  return name.replace(/[^a-zA-Z0-9 ]/g, '').substring(0, 50);
 }
 
 function showNameModal() {
@@ -274,9 +291,17 @@ function showLeaderboardModal() {
   const tbody = document.querySelector('#leaderboard-table tbody');
   tbody.innerHTML = '';
 
+  const loadingRow = document.createElement('tr');
+  const loadingCell = document.createElement('td');
+  loadingCell.colSpan = 4;
+  loadingCell.textContent = 'Loading...';
+  loadingRow.appendChild(loadingCell);
+  tbody.appendChild(loadingRow);
+
   fetch(`${API_URL}/leaderboard`)
     .then(response => response.json())
     .then(data => {
+      tbody.innerHTML = '';
       data.forEach((entry, index) => {
         const row = document.createElement('tr');
 
@@ -303,6 +328,13 @@ function showLeaderboardModal() {
     })
     .catch(error => {
       console.error('Error fetching leaderboard:', error);
+      tbody.innerHTML = '';
+      const errorRow = document.createElement('tr');
+      const errorCell = document.createElement('td');
+      errorCell.colSpan = 4;
+      errorCell.textContent = 'Failed to load leaderboard.';
+      errorRow.appendChild(errorCell);
+      tbody.appendChild(errorRow);
       alert('Failed to load leaderboard. Please try again later.');
     });
 }

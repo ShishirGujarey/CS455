@@ -5,7 +5,8 @@ export const state = {
   currentRow: 0,
   currentCol: 0,
   completed: false,
-  won: false
+  won: false,
+  playerName: ''
 };
 
 function drawGrid(container) {
@@ -117,7 +118,8 @@ async function submitGuess(word) {
     },
     body: JSON.stringify({
       gameId: state.gameId,
-      guess: word
+      guess: word,
+      name: state.playerName
     })
   });
   if (!response.ok) {
@@ -156,7 +158,13 @@ function applyFeedback(feedback) {
 async function resetGame() {
   try {
     const response = await fetch(`${API_URL}/start`, {
-      method: 'POST'
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: state.playerName
+      })
     });
     const data = await response.json();
     state.gameId = data.gameId;
@@ -191,13 +199,30 @@ async function resetGame() {
   }
 }
 
+function handleStartGame() {
+  const nameInput = document.getElementById('player-name');
+  const name = nameInput.value.trim();
+  if (name === '') {
+    alert('Please enter your name to start the game.');
+    return;
+  }
+  state.playerName = name;
+  document.getElementById('name-input-container').style.display = 'none';
+  document.getElementById('game-container').style.display = 'block';
+  resetGame();
+  registerKeyboardEvents();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const resetButton = document.getElementById('reset-button');
   if (resetButton) {
     resetButton.addEventListener('click', resetGame);
   }
-  resetGame();
-  registerKeyboardEvents();
+
+  const startGameButton = document.getElementById('start-game-button');
+  if (startGameButton) {
+    startGameButton.addEventListener('click', handleStartGame);
+  }
 });
 
 export { getCurrentWord, resetGame, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };

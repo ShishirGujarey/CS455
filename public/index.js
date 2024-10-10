@@ -86,13 +86,15 @@ async function handleEnterKey() {
       }
 
       if (state.completed) {
+        const finalScore = calculateScore();
+
         if (state.won) {
-          alert('Congratulations!');
+          alert(`Congratulations, ${state.playerName}! Your score is ${finalScore}.`);
         } else {
           state.secret = response.secret;
-          alert(`Better luck next time! The word was ${state.secret}.`);
+          alert(`Better luck next time, ${state.playerName}! Your score is ${finalScore}. The word was ${state.secret}.`);
         }
-        const finalScore = calculateScore();
+
         await saveScore(state.playerName, finalScore);
       }
     } catch (error) {
@@ -100,6 +102,7 @@ async function handleEnterKey() {
     }
   }
 }
+
 
 function getCurrentWord(state) {
   return state.grid[state.currentRow].reduce((prev, curr) => prev + curr);

@@ -213,7 +213,7 @@ async function resetGame() {
 
 function calculateScore() {
   if (state.won) {
-    return 100 - (state.currentRow * 10);
+    return 60 - (state.currentRow * 10);
   } else {
     return 0;
   }

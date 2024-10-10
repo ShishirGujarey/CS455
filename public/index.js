@@ -118,8 +118,7 @@ async function submitGuess(word) {
     },
     body: JSON.stringify({
       gameId: state.gameId,
-      guess: word,
-      name: state.playerName
+      guess: word
     })
   });
   if (!response.ok) {
@@ -158,13 +157,7 @@ function applyFeedback(feedback) {
 async function resetGame() {
   try {
     const response = await fetch(`${API_URL}/start`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        name: state.playerName
-      })
+      method: 'POST'
     });
     const data = await response.json();
     state.gameId = data.gameId;
@@ -194,23 +187,51 @@ async function resetGame() {
     if (resetButton) {    
       resetButton.blur();
     }
+
+    showNameModal();
   } catch (error) {
     alert('Error resetting game.', error);
   }
 }
 
-function handleStartGame() {
-  const nameInput = document.getElementById('player-name');
+
+function showNameModal() {
+  const modal = document.getElementById('name-modal');
+  modal.style.display = 'block';
+}
+
+function closeNameModal() {
+  const modal = document.getElementById('name-modal');
+  modal.style.display = 'none';
+}
+
+function handleNameSubmission() {
+  const nameInput = document.getElementById('player-name-input');
   const name = nameInput.value.trim();
   if (name === '') {
-    alert('Please enter your name to start the game.');
+    alert('Please enter your name.');
     return;
   }
   state.playerName = name;
-  document.getElementById('name-input-container').style.display = 'none';
-  document.getElementById('game-container').style.display = 'block';
-  resetGame();
-  registerKeyboardEvents();
+  closeNameModal();
+}
+
+function setupNameModalEvents() {
+  const modal = document.getElementById('name-modal');
+  const closeBtn = document.getElementById('close-name-modal');
+  const submitBtn = document.getElementById('submit-name-button');
+
+  closeBtn.onclick = () => {
+    alert('Please enter your name to start the game.');
+  };
+
+  submitBtn.onclick = handleNameSubmission;
+
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      alert('Please enter your name to start the game.');
+    }
+  };
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -218,11 +239,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (resetButton) {
     resetButton.addEventListener('click', resetGame);
   }
-
-  const startGameButton = document.getElementById('start-game-button');
-  if (startGameButton) {
-    startGameButton.addEventListener('click', handleStartGame);
-  }
+  resetGame();
+  registerKeyboardEvents();
+  setupNameModalEvents();
 });
 
 export { getCurrentWord, resetGame, isLetter, addLetter, removeLetter, drawGrid, updateGrid, registerKeyboardEvents, handleEnterKey };

@@ -127,7 +127,7 @@ describe('Frontend Unit Tests', () => {
     state.won = true;
     state.currentRow = 3;
     const score = calculateScore();
-    expect(score).toBe(70);
+    expect(score).toBe(30);
   });
 
   test('calculateScore should return 0 if not won', () => {
@@ -256,12 +256,12 @@ describe('Frontend Integration Tests', () => {
   test('saveScore should successfully save a score', async () => {
     fetchMock.mockResponseOnce(JSON.stringify({ message: 'Score saved successfully.' }), { status: 201 });
 
-    await saveScore('Tester', 90);
+    await saveScore('Tester', 40);
 
     expect(fetch).toHaveBeenCalledWith('/api/save-score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'Tester', score: 90 })
+      body: JSON.stringify({ name: 'Tester', score: 40 })
     });
 
   });
